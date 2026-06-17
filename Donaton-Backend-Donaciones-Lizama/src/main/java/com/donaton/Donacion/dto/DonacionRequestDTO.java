@@ -1,27 +1,20 @@
-package com.donaton.Donacion.model;
+package com.donaton.Donacion.dto;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
-
-@Entity
-@Table(name = "donaciones")
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Donacion {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class DonacionRequestDTO {
+    private String tipoDonante; // "EMPRESA" o "PERSONA"
     private String tipo;
     private String recurso;
     private int cantidad;
     private String origen;
     private String centroAcopioAsignado;
-    private LocalDateTime fechaIngreso;
+    
+    // Datos específicos
+    private String rut;
+    private String nombreRazonSocial;
 
     // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public String getTipoDonante() { return tipoDonante; }
+    public void setTipoDonante(String tipoDonante) { this.tipoDonante = tipoDonante; }
     public String getTipo() { return tipo; }
     public void setTipo(String tipo) { this.tipo = tipo; }
     public String getRecurso() { return recurso; }
@@ -32,6 +25,8 @@ public abstract class Donacion {
     public void setOrigen(String origen) { this.origen = origen; }
     public String getCentroAcopioAsignado() { return centroAcopioAsignado; }
     public void setCentroAcopioAsignado(String centroAcopioAsignado) { this.centroAcopioAsignado = centroAcopioAsignado; }
-    public LocalDateTime getFechaIngreso() { return fechaIngreso; }
-    public void setFechaIngreso(LocalDateTime fechaIngreso) { this.fechaIngreso = fechaIngreso; }
+    public String getRut() { return rut; }
+    public void setRut(String rut) { this.rut = rut; }
+    public String getNombreRazonSocial() { return nombreRazonSocial; }
+    public void setNombreRazonSocial(String nombreRazonSocial) { this.nombreRazonSocial = nombreRazonSocial; }
 }
