@@ -9,6 +9,7 @@ import com.donaton.Donacion.model.Donacion;
 import com.donaton.Donacion.repository.DonacionRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DonacionService {
@@ -17,14 +18,25 @@ public class DonacionService {
     private DonacionRepository donacionRepository;
 
     public Donacion registrarDonacion(DonacionRequestDTO request) {
-        // Delegamos la creación al Factory Pattern
         Donacion donacion = DonacionFactory.crearDonacion(request);
-        
-        // Uso del Repository Pattern para guardar en la BD
         return donacionRepository.save(donacion);
     }
 
     public List<Donacion> obtenerTodas() {
         return donacionRepository.findAll();
+    }
+
+    public void eliminarDonacion(Long id) {
+        donacionRepository.deleteById(id);
+    }
+
+    public Donacion actualizarCantidad(Long id, int nuevaCantidad) {
+        Optional<Donacion> donacionOpt = donacionRepository.findById(id);
+        if (donacionOpt.isPresent()) {
+            Donacion d = donacionOpt.get();
+            d.setCantidad(nuevaCantidad);
+            return donacionRepository.save(d);
+        }
+        throw new RuntimeException("Donación no encontrada");
     }
 }

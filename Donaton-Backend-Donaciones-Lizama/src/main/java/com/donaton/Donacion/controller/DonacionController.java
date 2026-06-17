@@ -7,6 +7,7 @@ import com.donaton.Donacion.dto.DonacionRequestDTO;
 import com.donaton.Donacion.model.Donacion;
 import com.donaton.Donacion.service.DonacionService;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/donacion")
@@ -25,5 +26,17 @@ public class DonacionController {
     @GetMapping
     public ResponseEntity<List<Donacion>> listarDonaciones() {
         return ResponseEntity.ok(donacionService.obtenerTodas());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarDonacion(@PathVariable Long id) {
+        donacionService.eliminarDonacion(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarDonacion(@PathVariable Long id, @RequestBody Map<String, Integer> payload) {
+        Donacion d = donacionService.actualizarCantidad(id, payload.get("cantidad"));
+        return ResponseEntity.ok(d);
     }
 }
