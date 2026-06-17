@@ -29,10 +29,9 @@ public class UsuarioService {
 
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setUsername(request.getUsername());
-        // Cifrado de contraseña estricto mediante BCrypt antes de persistir
         nuevoUsuario.setPassword(passwordEncoder.encode(request.getPassword()));
         nuevoUsuario.setNombre(request.getNombre());
-        nuevoUsuario.setRol("ROLE_USER"); // Rol por defecto
+        nuevoUsuario.setRol("ROLE_USER"); 
 
         usuarioRepository.save(nuevoUsuario);
         return "Usuario registrado de manera exitosa";
@@ -42,12 +41,13 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Credenciales incorrectas"));
 
-        // Verificación de contraseñas de manera segura contra el Hash de la DB
         if (!passwordEncoder.matches(request.getPassword(), usuario.getPassword())) {
             throw new RuntimeException("Credenciales incorrectas");
         }
 
         String token = tokenProvider.generarToken(usuario.getUsername(), usuario.getRol());
-        return new AuthResponse(token, usuario.getUsername(), usuario.getRol());
+        
+        // Aquí pasamos el nombre real (o razón social) extraído de la base de datos
+        return new AuthResponse(token, usuario.getUsername(), usuario.getRol(), usuario.getNombre());
     }
 }

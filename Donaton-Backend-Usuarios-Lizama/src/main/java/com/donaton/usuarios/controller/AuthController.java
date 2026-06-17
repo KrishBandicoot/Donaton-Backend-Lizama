@@ -6,10 +6,11 @@ import com.donaton.usuarios.dto.RegistroRequest;
 import com.donaton.usuarios.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*") // Permite la comunicación transparente desde el Frontend/BFF
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final UsuarioService usuarioService;
@@ -19,14 +20,25 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registrarUsuario(@RequestBody RegistroRequest registroRequest) {
-        String respuesta = usuarioService.registrar(registroRequest);
-        return ResponseEntity.ok(respuesta);
+    public ResponseEntity<?> registrarUsuario(@RequestBody RegistroRequest registroRequest) {
+        try {
+            String respuesta = usuarioService.registrar(registroRequest);
+            // Retornamos un JSON válido si el registro es exitoso
+            return ResponseEntity.ok(Map.of("mensaje", respuesta));
+        } catch (RuntimeException e) {
+            // Si el correo ya existe u ocurre un error de lógica, mandamos 400 Bad Request con el error exacto
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> autenticarUsuario(@RequestBody LoginRequest loginRequest) {
-        AuthResponse respuesta = usuarioService.autenticar(loginRequest);
-        return ResponseEntity.ok(respuesta);
+    public ResponseEntity<?> autenticarUsuario(@RequestBody LoginRequest loginRequest) {
+        try {
+            AuthResponse respuesta = usuarioService.autenticar(loginRequest);
+            return ResponseEntity.ok(respuesta);
+        } catch (RuntimeException e) {
+            // Si las credenciales están mal, devolvemos 401 Unauthorized
+            return ResponseEntity.status(401).body(Map.of("error", e.getMessage()));
+        }
     }
 }
