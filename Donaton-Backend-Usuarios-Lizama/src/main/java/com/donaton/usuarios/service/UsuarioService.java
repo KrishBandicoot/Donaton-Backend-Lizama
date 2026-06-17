@@ -32,6 +32,9 @@ public class UsuarioService {
         nuevoUsuario.setPassword(passwordEncoder.encode(request.getPassword()));
         nuevoUsuario.setNombre(request.getNombre());
         nuevoUsuario.setRol("ROLE_USER"); 
+        
+        // Guardamos si es PERSONA o EMPRESA, si no viene le asignamos PERSONA por defecto
+        nuevoUsuario.setTipoUsuario(request.getTipoUsuario() != null ? request.getTipoUsuario() : "PERSONA");
 
         usuarioRepository.save(nuevoUsuario);
         return "Usuario registrado de manera exitosa";
@@ -47,7 +50,7 @@ public class UsuarioService {
 
         String token = tokenProvider.generarToken(usuario.getUsername(), usuario.getRol());
         
-        // Aquí pasamos el nombre real (o razón social) extraído de la base de datos
-        return new AuthResponse(token, usuario.getUsername(), usuario.getRol(), usuario.getNombre());
+        // Retornamos también el tipo de usuario guardado en base de datos
+        return new AuthResponse(token, usuario.getUsername(), usuario.getRol(), usuario.getNombre(), usuario.getTipoUsuario());
     }
 }

@@ -5,8 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "donaciones")
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Donacion {
+public class Donacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +17,9 @@ public abstract class Donacion {
     private String origen;
     private String centroAcopioAsignado;
     private LocalDateTime fechaIngreso;
+    
+    // AQUÍ: Nueva columna para guardar Empresa o Persona
+    private String tipoDonante; 
 
     // Getters y Setters
     public Long getId() { return id; }
@@ -34,4 +36,6 @@ public abstract class Donacion {
     public void setCentroAcopioAsignado(String centroAcopioAsignado) { this.centroAcopioAsignado = centroAcopioAsignado; }
     public LocalDateTime getFechaIngreso() { return fechaIngreso; }
     public void setFechaIngreso(LocalDateTime fechaIngreso) { this.fechaIngreso = fechaIngreso; }
+    public String getTipoDonante() { return tipoDonante; }
+    public void setTipoDonante(String tipoDonante) { this.tipoDonante = tipoDonante; }
 }
