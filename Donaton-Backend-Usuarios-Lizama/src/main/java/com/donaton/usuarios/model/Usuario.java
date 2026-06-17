@@ -20,7 +20,11 @@ public class Usuario {
     private String nombre;
 
     @Column(nullable = false)
-    private String rol; // Ejemplo: "ROLE_USER" o "ROLE_ADMIN"
+    private String rol; 
+
+    // Nuevo campo para saber cómo se registró
+    @Column(name = "tipo_usuario")
+    private String tipoUsuario;
 
     public Usuario() {}
 
@@ -46,4 +50,7 @@ public class Usuario {
 
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
+
+    public String getTipoUsuario() { return tipoUsuario; }
+    public void setTipoUsuario(String tipoUsuario) { this.tipoUsuario = tipoUsuario; }
 }
