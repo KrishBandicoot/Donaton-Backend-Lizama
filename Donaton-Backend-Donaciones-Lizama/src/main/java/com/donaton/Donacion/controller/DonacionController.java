@@ -3,29 +3,22 @@ package com.donaton.Donacion.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.donaton.Donacion.dto.DonacionRequestDTO;
 import com.donaton.Donacion.model.Donacion;
 import com.donaton.Donacion.service.DonacionService;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/donacion")
-@CrossOrigin(origins = "*") // Permite la conexión con el Frontend
+@CrossOrigin(origins = "*") 
 public class DonacionController {
 
     @Autowired
     private DonacionService donacionService;
 
     @PostMapping
-    public ResponseEntity<Donacion> crearDonacion(@RequestBody Donacion request) {
-        Donacion nuevaDonacion = donacionService.registrarDonacion(
-                request.getTipo(),
-                request.getRecurso(),
-                request.getCantidad(),
-                request.getOrigen(),
-                request.getCentroAcopioAsignado()
-        );
+    public ResponseEntity<Donacion> crearDonacion(@RequestBody DonacionRequestDTO request) {
+        Donacion nuevaDonacion = donacionService.registrarDonacion(request);
         return ResponseEntity.ok(nuevaDonacion);
     }
 
